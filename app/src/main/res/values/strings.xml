@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">FunServerProject</string>
+    <string name="facebook_app_id">337564276651709</string>
+    <string name="fb_login_protocol_scheme">fb337564276651709</string>
+
 </resources>
