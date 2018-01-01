@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
+    public static ArrayList<Contact> ContactList = new ArrayList<Contact>();
     private final int Contact_Fragment = 1;
     private final int Gallery_Fragment = 2;
     private final int Custom_Fragment = 3;
@@ -80,4 +83,28 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
         }
     }
+
+    public void addContact(Contact contact) {
+        Contact oldContact;
+        boolean existDup = false;
+        for (int i = 0; i < ContactList.size(); i++) {
+            oldContact = ContactList.get(i);
+            if(oldContact.getName().equals(contact.getName())) { //Equal name
+                if(oldContact.getNum().length() < contact.getName().length()) { //Length of old contact < length of new contact
+                    ContactList.remove(i);
+                    ContactList.add(contact);
+                    existDup = true;
+                    break;
+                }
+            }
+        }
+        if(!existDup) {
+            ContactList.add(new Contact(contact.getName(), contact.getNum()));
+        }
+    }
+
+    public ArrayList<Contact> returnContactList() {
+        return ContactList;
+    }
+
 }

@@ -43,6 +43,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -52,10 +53,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class Fragment1 extends Fragment{
 
+    //private ArrayList<Contact> ContactList = MainActivity.ContactList;
     private final String TAG = "Fragment1";
     private ListView mListView;
     private ListViewAdapter mAdapter = new ListViewAdapter();
     boolean isFirst = true;
+
+    boolean finished = false;
+
 
     TextView txtStatus;
 
@@ -120,8 +125,6 @@ public class Fragment1 extends Fragment{
             }
         }
 
-
-
         if (isFirst) {
             makeContactList();
             isFirst = false;
@@ -129,7 +132,6 @@ public class Fragment1 extends Fragment{
             mListView.setAdapter(mAdapter);
         }
         callbackManager = CallbackManager.Factory.create();
-        txtStatus = (TextView) view.findViewById(R.id.txtStatus);
         loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
 
@@ -137,9 +139,27 @@ public class Fragment1 extends Fragment{
 
         loginWithFB();
         getFriendList();
+        Log.d(TAG, "Below are the names inside contactlist");
+
+        //while(!finished) {
+
+//        }
 
 
+        Log.d(TAG, "Final line length of contact list = " +MainActivity.ContactList.size());
 
+        Collections.sort(MainActivity.ContactList);
+        for (int i = 0; i < MainActivity.ContactList.size(); i++ ) {
+            String name = MainActivity.ContactList.get(i).getName();
+            String phoneNum = MainActivity.ContactList.get(i).getNum();
+            if (mAdapter.isDuplicate(name, phoneNum)){
+                continue;
+            }else {
+                mAdapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_launcher_foreground),
+                        name, phoneNum);
+                addContact(new Contact(name, phoneNum));
+            }
+        }
 
         return view;
 
@@ -169,13 +189,8 @@ public class Fragment1 extends Fragment{
                 }
             }
 
-            // check if adaptor has same contact
-            if (mAdapter.isDuplicate(name, phoneNum)){
-                continue;
-            }else {
-                mAdapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_launcher_background),
-                        name, phoneNum);
-            }
+            addContact(new Contact(name, phoneNum));
+
 
             if (!mCursor.moveToNext()) {
                 break;
@@ -183,7 +198,7 @@ public class Fragment1 extends Fragment{
 
 
         }
-        Collections.sort(mAdapter.getItemList(), new CompareNameDesc());
+        //Collections.sort(mAdapter.getItemList(), new CompareNameDesc());
         mListView.setAdapter(mAdapter);
     }
 
@@ -198,19 +213,19 @@ public class Fragment1 extends Fragment{
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                txtStatus.setText("Login Success\n"+loginResult.getAccessToken());
+                //txtStatus.setText("Login Success\n"+loginResult.getAccessToken());
                 Log.d(TAG,"Login Success");
             }
 
             @Override
             public void onCancel() {
-                txtStatus.setText("Login cancelled.");
+                //txtStatus.setText("Login cancelled.");
                 Log.d(TAG,"Login Cancelled");
             }
 
             @Override
             public void onError(FacebookException error) {
-                txtStatus.setText("Login Error: "+error.getMessage());
+                //txtStatus.setText("Login Error: "+error.getMessage());
             }
         });
     }
@@ -235,17 +250,47 @@ public class Fragment1 extends Fragment{
                             JSONArray dataArray = responseObject.getJSONArray("data");
                             for(int i = 0; i < dataArray.length(); i++) {
                                 JSONObject dataObject = dataArray.getJSONObject(i);
-                                Log.d(TAG, dataObject.getString("name"));
+                                String name = dataObject.getString("name");
+                                //Log.d("Adding ", dataObject.toString());
+                                Log.d("Adding ", name);
+                                //mAdapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_launcher_background),
+                                //        dataObject.getString("name"), null);
+                                addContact(new Contact(name));
+                                Log.d("Length of contact list = ", Integer.toString(MainActivity.ContactList.size()));
                             }
+                            //finished=true;
+                            Log.d(TAG,"Finished");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
         ).executeAsync();
+        Log.d("Length of contact list in the end = ", Integer.toString(MainActivity.ContactList.size()));
 
         return friendslist;
     }
+    public void addContact(Contact contact) {
+        Contact oldContact;
+        boolean existDup = false;
+        for (int i = 0; i < MainActivity.ContactList.size(); i++) {
+            oldContact = MainActivity.ContactList.get(i);
+            if(oldContact.getName().equals(contact.getName())) { //Equal name
+                if(oldContact.getNum().length() < contact.getName().length()) { //Length of old contact < length of new contact
+                    MainActivity.ContactList.remove(i);
+                    MainActivity.ContactList.add(contact);
+                    existDup = true;
+                    break;
+                } else {
+                    existDup = true;
+                    break;
+                }
+            }
+        }
+        if(!existDup) {
+            MainActivity.ContactList.add(new Contact(contact.getName(), contact.getNum()));
+        }
+    }
+
 
 }
