@@ -138,12 +138,15 @@ public class Fragment1 extends Fragment{
         loginButton.setFragment(this);
 
         loginWithFB();
-        getFriendList();
         Log.d(TAG, "Below are the names inside contactlist");
 
         //while(!finished) {
 
 //        }
+
+        if(isLoggedin()) {
+            getFriendList();
+        }
 
 
         Log.d(TAG, "Final line length of contact list = " +MainActivity.ContactList.size());
@@ -152,13 +155,8 @@ public class Fragment1 extends Fragment{
         for (int i = 0; i < MainActivity.ContactList.size(); i++ ) {
             String name = MainActivity.ContactList.get(i).getName();
             String phoneNum = MainActivity.ContactList.get(i).getNum();
-            if (mAdapter.isDuplicate(name, phoneNum)){
-                continue;
-            }else {
                 mAdapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_launcher_foreground),
                         name, phoneNum);
-                addContact(new Contact(name, phoneNum));
-            }
         }
 
         return view;
@@ -214,6 +212,7 @@ public class Fragment1 extends Fragment{
             @Override
             public void onSuccess(LoginResult loginResult) {
                 //txtStatus.setText("Login Success\n"+loginResult.getAccessToken());
+                //getFriendList();
                 Log.d(TAG,"Login Success");
             }
 
@@ -270,7 +269,7 @@ public class Fragment1 extends Fragment{
 
         return friendslist;
     }
-    public void addContact(Contact contact) {
+    private void addContact(Contact contact) {
         Contact oldContact;
         boolean existDup = false;
         for (int i = 0; i < MainActivity.ContactList.size(); i++) {
@@ -290,6 +289,11 @@ public class Fragment1 extends Fragment{
         if(!existDup) {
             MainActivity.ContactList.add(new Contact(contact.getName(), contact.getNum()));
         }
+    }
+
+    public boolean isLoggedin() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
     }
 
 
