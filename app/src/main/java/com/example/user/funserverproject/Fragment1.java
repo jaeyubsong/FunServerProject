@@ -151,6 +151,7 @@ public class Fragment1 extends Fragment{
 
         Log.d(TAG, "Final line length of contact list = " +MainActivity.ContactList.size());
 
+
         Collections.sort(MainActivity.ContactList);
         for (int i = 0; i < MainActivity.ContactList.size(); i++ ) {
             String name = MainActivity.ContactList.get(i).getName();
