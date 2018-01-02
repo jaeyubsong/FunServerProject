@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private final int Gallery_Fragment = 2;
     private final int Custom_Fragment = 3;
     private final String TAG = "MainActivity";
+    private static boolean frag2_first_time = true;
 
     private Button btn_tab1, btn_tab2, btn_tab3;
 
@@ -100,6 +101,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
         if(!existDup) {
             ContactList.add(new Contact(contact.getName(), contact.getNum()));
+        }
+    }
+
+    public static boolean get_frag2First() {
+        if(frag2_first_time){
+            return true;
+        } else {
+            return false;
         }
     }
 

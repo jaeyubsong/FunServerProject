@@ -265,6 +265,7 @@ public class Fragment1 extends Fragment{
                     }
                 }
         ).executeAsync();
+
         Log.d("Length of contact list in the end = ", Integer.toString(MainActivity.ContactList.size()));
 
         return friendslist;
