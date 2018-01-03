@@ -13,13 +13,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     public static ArrayList<Contact> ContactList = new ArrayList<Contact>();
+    public static ArrayList<CalendarEvent> EventList = new ArrayList<CalendarEvent>();
     private final int Contact_Fragment = 1;
     private final int Gallery_Fragment = 2;
     private final int Custom_Fragment = 3;
     private final String TAG = "MainActivity";
     private static boolean frag2_first_time = true;
 
-    private Button btn_tab1, btn_tab2, btn_tab3;
+    private Button btn_tab1, btn_tab2, btn_tab3 ;
 
 
     @Override
@@ -34,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         btn_tab1.setOnClickListener(this);
         btn_tab2.setOnClickListener(this);
         btn_tab3.setOnClickListener(this);
-
-
 
 
     }

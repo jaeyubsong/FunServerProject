@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dateRange"
+        android:layout_width="98dp"
+        android:layout_height="wrap_content"
+        android:text="    2011/01/14 ~ 2016/01/15" />
+
+    <TextView
+        android:id="@+id/event_title"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="New yearws"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/event_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:text="ddd"
+        android:textSize="11dp" />
+
+</LinearLayout>
