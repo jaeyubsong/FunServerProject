@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.user.FunProject1.Fragment2">
+    tools:context="com.example.user.funserverproject.Fragment2">
 
     <!-- TODO: Update blank fragment layout -->
     <!--<TextView
@@ -29,5 +29,11 @@
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
+
+    <Button
+        android:id="@+id/downbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download" />
 
 </FrameLayout>

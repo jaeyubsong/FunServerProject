@@ -14,12 +14,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,12 +27,10 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -43,21 +39,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by user on 2017-12-30.
@@ -138,11 +129,9 @@ public class Fragment1 extends Fragment{
             }
         }
 
-
-        new JSONTask().execute("http://13.125.110.222:3000/users");
-        new JSONTask2().execute("http://13.125.110.222:3000/post");
-
-
+        if (isLoggedin()) {
+            getFriendList();
+        }
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
@@ -262,7 +251,7 @@ public class Fragment1 extends Fragment{
                             for(int i = 0; i < dataArray.length(); i++) {
                                 JSONObject dataObject = dataArray.getJSONObject(i);
                                 String name = dataObject.getString("name");
-                                Log.d("Adding ", dataObject.toString());
+                                //Log.d("Adding ", dataObject.toString());
                                 //mAdapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_launcher_background),
                                 //        dataObject.getString("name"), null);
                                 addContact(new Contact(name, "-"));
@@ -376,6 +365,7 @@ public class Fragment1 extends Fragment{
             try {
                 Fragment1.this.mAdapter = new ListViewAdapter();
                 JSONObject ja2 = (JSONObject) new JSONArray(result).get(0);
+
                 JSONArray ja = (JSONArray) new JSONArray(ja2.getString("newcont"));
 
                 for (int i = 0; i < ja.length(); i++) {
